@@ -1,6 +1,4 @@
-import { assets } from "../Assets/assets";
 import React from "react";
-import Image from "next/image";
 import axios from "axios";
 import { toast } from "react-toastify";
 
@@ -22,17 +20,43 @@ const Header = () => {
   };
 
   return (
-    <div className="py-5 px-5 md:px-12 lg:px-24">
-        <div className="flex justify-between items-center">
-          <button className="flex items-center gap-2 font-medium py-1 px-3 sm:py-3 sm:px-6 border border-solid border-black shadow-[-7px_7px_0px_#000000]">
-              Get started <Image src={assets.arrow} alt="Seta" width={20} height={20} /></button>
+    <div className="bg-gradient-to-r from-gray-800 to-gray-900 py-16 px-5 md:px-12 lg:px-24">
+        <div className="flex justify-between items-center mb-12">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full flex items-center justify-center">
+              <span className="text-white font-bold text-lg">B</span>
+            </div>
+            <span className="text-2xl font-bold text-white">Blog</span>
+          </div>
+          <div className="flex items-center gap-4">
+            <button className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-2 rounded-full hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 transform hover:scale-105 font-medium">
+                Começar Leitura
+            </button>
+          </div>
         </div>
-    <div className="text-center my-8">
-      <h1 className="text-3xl sm:text-5xl font-medium">Latest Blogs</h1>
-      <p className="mt-10 max-w-[740] m-auto text-xs sm:text-base">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Totam adipisci fuga reiciendis. Blanditiis temporibus quo nesciunt culpa! Voluptate animi ipsum vitae velit fuga beatae repudiandae aliquam libero facilis! Officiis, dolorem?</p>
-    <form onSubmit={onSubmitHandler} className="flex justify-between max-w-[500px] scale-75 sm:scale-100 mx-auto mt-10 border border-black shadow-[-7px_7px_0px_#000000]" action="">
-      <input onChange={(e) => setEmail(e.target.value)} value={email} type="email" placeholder="Enter your email" className="pl-4 outline-none" />
-      <button type="submit" className="border-l border-black py-4 px-4 sm:px-8 active:bg-gray-600 active:text-white">Subscribe</button>
+    <div className="text-center my-12">
+      <h1 className="text-4xl sm:text-6xl font-bold text-white mb-6 leading-tight">
+        Descubra Histórias que <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Inspiram</span>
+      </h1>
+      <p className="mt-6 max-w-2xl m-auto text-lg sm:text-xl text-gray-300 leading-relaxed">
+        Explore artigos únicos sobre tecnologia, desenvolvimento pessoal e inovação. Conteúdo criado para expandir seus horizontes e transformar sua perspectiva.
+      </p>
+    <form onSubmit={onSubmitHandler} className="max-w-md mx-auto mt-12" action="">
+      <div className="flex rounded-full bg-gray-800 shadow-lg border-2 border-gray-700 overflow-hidden">
+        <input 
+          onChange={(e) => setEmail(e.target.value)} 
+          value={email} 
+          type="email" 
+          placeholder="Seu melhor email" 
+          className="flex-1 px-6 py-4 outline-none text-gray-200 bg-transparent placeholder-gray-500" 
+        />
+        <button 
+          type="submit" 
+          className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-8 py-4 hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 font-medium"
+        >
+          Inscrever-se
+        </button>
+      </div>
     </form>
     </div>
 
