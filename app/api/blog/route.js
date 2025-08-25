@@ -1,6 +1,10 @@
 import { NextResponse } from 'next/server';
 import { writeFile } from 'fs/promises';
-import dbConnect from '../../../lib/config/db';
+import BlogModel from '@/lib/models/BlogModel';
+import dbConnect from '@/lib/config/db';
+import { request } from 'http';
+
+const fs = require('fs');
 
 const LoadDB = async () => {
     await dbConnect();
@@ -8,10 +12,21 @@ const LoadDB = async () => {
 
 LoadDB();
 
-export async function GET() {
-    console.log("GET request to blog API");
-    return NextResponse.json({ message: 'Blog API endpoint' });
-} 
+export async function GET(request) {
+    const blogId = request.nextUrl.searchParams.get('id');
+    if (blogId) {
+        const blog = await BlogModel.findById(blogId);
+        if (blog) {
+            return NextResponse.json({ blog });
+        } else {
+            return NextResponse.json({ error: 'Blog not found' }, { status: 404 });
+        }
+    } else {
+        const blogs = await BlogModel.find({});
+        return NextResponse.json({ blogs });
+    }
+    
+}
 
 export async function POST(request) {
     try {
@@ -60,10 +75,11 @@ export async function POST(request) {
                 author: `${formData.get('author')}`,
                 image: `${imgUrl}`,
                 
-                authoring: `${formData.get('authoring')}`
+                authorImg: `${formData.get('authorImg')}`
             }
+            await BlogModel.create(blogData);
 
-            return NextResponse.json({ message: 'Blog created', blogData });
+       return NextResponse.json({ success: true, msg: "Blog adicionado com sucesso!" });
         } catch (formDataError) {
             console.log('FormData parsing failed, trying JSON:', formDataError.message);
             
@@ -92,4 +108,12 @@ export async function POST(request) {
             details: error.message 
         }, { status: 500 });
     }
+}
+
+export async function DELETE(request) {
+    const id = request.nextUrl.searchParams.get('id');
+    const blog = await BlogModel.findById(id);
+    fs.unlink(`./public${blog.image}`, () => {});
+    await BlogModel.findByIdAndDelete(id);
+    return NextResponse.json({ success: true, msg: 'Blog deletado com sucesso!' });
 }
