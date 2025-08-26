@@ -4,7 +4,6 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Footer from "../../../Components/Footer";
-import ThemeToggle from "../../../Components/ThemeToggle";
 import axios from "axios";
 
 const page = ({params}) => {

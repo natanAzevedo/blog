@@ -1,7 +1,7 @@
 'use client'
 import React from "react";
 import Image from "next/image";
-import { assets } from "@/Assets/assets";
+import { assets } from "../../../Assets/assets";
 import axios from "axios";
 import { toast } from "react-toastify";
 

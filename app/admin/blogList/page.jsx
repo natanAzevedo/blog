@@ -1,6 +1,6 @@
 'use client'
 import React from "react";
-import BlogTableItem from "@/Components/AdminComponents/BlogTableItem";
+import BlogTableItem from "../../../Components/AdminComponents/BlogTableItem";
 import axios from "axios";
 import { toast } from "react-toastify";
 

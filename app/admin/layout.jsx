@@ -1,6 +1,6 @@
 'use client'
-import { assets } from '@/Assets/assets';
-import SideBar from '@/Components/AdminComponents/SideBar';
+import { assets } from '../../Assets/assets';
+import SideBar from '../../Components/AdminComponents/SideBar';
 import Image from 'next/image';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from "react-toastify";

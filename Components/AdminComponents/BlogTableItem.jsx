@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import { assets } from "@/Assets/assets";
+import { assets } from "../../Assets/assets";
 
 const BlogTableItem = ({authorImg, title, author, date, deleteBlog, mongoId}) => {
     const BlogDate = new Date(date);

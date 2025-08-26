@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { writeFile } from 'fs/promises';
-import BlogModel from '@/lib/models/BlogModel';
-import dbConnect from '@/lib/config/db';
+import BlogModel from '../../../lib/models/BlogModel';
+import dbConnect from '../../../lib/config/db';
 import { request } from 'http';
 
 const fs = require('fs');
