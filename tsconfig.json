@@ -31,8 +31,10 @@
     "next-env.d.ts",
     ".next/types/**/*.ts",
     "**/*.ts",
-    "**/*.tsx"
-, "app/admin/layout.jsx", "app/admin/page.jsx", "app/admin/addProduct/page.jsx"  ],
+    "**/*.tsx",
+    "**/*.js",
+    "**/*.jsx"
+  ],
   "exclude": [
     "node_modules"
   ]
