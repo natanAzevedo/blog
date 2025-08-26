@@ -7,11 +7,20 @@ import axios from "axios";
 const BlogList = () => {
 const [menu,setMenu] =  React.useState("All");
 const [blogs, setBlogs] = React.useState([]);
+const [loading, setLoading] = React.useState(true);
 
 const fetchBlogs = async () => {
-  const response = await axios.get('/api/blog');
-  setBlogs(response.data.blogs);
-  console.log(response.data.blogs);
+  try {
+    setLoading(true);
+    const response = await axios.get('/api/blog');
+    setBlogs(response.data.blogs || []);
+    console.log(response.data.blogs);
+  } catch (error) {
+    console.error('Erro ao buscar blogs:', error);
+    setBlogs([]);
+  } finally {
+    setLoading(false);
+  }
 };
 
 useEffect(() => {
@@ -60,13 +69,13 @@ const categories = [
 
       {/* Grid de blogs */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mb-16">
-        {blogs.filter(item => menu === "All" ? true : item.category === menu).map((item,index) => {
+        {!loading && blogs.filter(item => menu === "All" ? true : item.category === menu).map((item,index) => {
           return <BlogItem key={index} id={item._id} image={item.image} title={item.title} description={item.description} category={item.category} />;
         })}
       </div>
 
-      {/* Seção de carregamento/estado vazio */}
-      {blogs.length === 0 && (
+      {/* Estado de carregamento */}
+      {loading && (
         <div className="text-center py-16">
           <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full flex items-center justify-center mx-auto mb-4">
             <svg className="w-8 h-8 text-white animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -78,8 +87,41 @@ const categories = [
         </div>
       )}
 
+      {/* Estado vazio - quando não há posts */}
+      {!loading && blogs.length === 0 && (
+        <div className="text-center py-16">
+          <div className="w-16 h-16 bg-gradient-to-r from-gray-500 to-gray-600 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+          </div>
+          <h3 className="text-xl font-semibold text-gray-100 mb-2">Nenhum post encontrado</h3>
+          <p className="text-gray-300 mb-6">Ainda não há artigos publicados. Volte em breve para conferir o novo conteúdo!</p>
+       
+        </div>
+      )}
+
+      {/* Estado quando há posts filtrados mas nenhum na categoria selecionada */}
+      {!loading && blogs.length > 0 && blogs.filter(item => menu === "All" ? true : item.category === menu).length === 0 && menu !== "All" && (
+        <div className="text-center py-16">
+          <div className="w-16 h-16 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </div>
+          <h3 className="text-xl font-semibold text-gray-100 mb-2">Nenhum post nesta categoria</h3>
+          <p className="text-gray-300 mb-6">Não encontramos artigos na categoria "{categories.find(cat => cat.key === menu)?.label}". Tente outra categoria!</p>
+          <button 
+            onClick={() => setMenu("All")}
+            className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white px-6 py-2 rounded-full hover:from-yellow-600 hover:to-orange-600 transition-all duration-300 transform hover:scale-105 font-medium"
+          >
+            Ver Todos os Posts
+          </button>
+        </div>
+      )}
+
       {/* Botão para ver mais */}
-      {blogs.length > 0 && (
+      {!loading && blogs.length > 0 && blogs.filter(item => menu === "All" ? true : item.category === menu).length > 0 && (
         <div className="text-center mt-12">
           <button className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white px-8 py-3 rounded-full hover:from-blue-600 hover:to-indigo-600 transition-all duration-300 transform hover:scale-105 font-medium shadow-lg">
             Carregar Mais Artigos

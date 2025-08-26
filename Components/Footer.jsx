@@ -33,7 +33,6 @@ const Footer = () => {
              <ul className="space-y-2">
                <li><a href="#" className="text-gray-400 hover:text-white transition-colors duration-300">Sobre</a></li>
                <li><a href="#" className="text-gray-400 hover:text-white transition-colors duration-300">Contato</a></li>
-               <li><a href="#" className="text-gray-400 hover:text-white transition-colors duration-300">Newsletter</a></li>
              </ul>
            </div>
          </div>
@@ -63,7 +62,7 @@ const Footer = () => {
        
        <div className="border-t border-gray-700 mt-8 pt-8 text-center">
          <p className="text-gray-400 text-sm">
-           © 2025 Blog. Todos os direitos reservados. | Feito com ❤️ para compartilhar conhecimento
+           © 2025 Blog. Todos os direitos reservados.
          </p>
        </div>
      </div>
