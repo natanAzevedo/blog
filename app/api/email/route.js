@@ -1,5 +1,5 @@
-import dbConnect from "@/lib/config/db.js";
-import EmailModel from "@/lib/models/EmailModel.js";
+import dbConnect from "@/lib/config/db";
+import EmailModel from "@/lib/models/EmailModel";
 import { NextResponse } from "next/server";
 
 const LoadDB = async () => {
