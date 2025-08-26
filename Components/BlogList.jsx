@@ -1,4 +1,3 @@
-import { blog_data } from "../Assets/assets";
 import React, { use } from "react";
 import BlogItem from "./BlogItem";
 import { useEffect } from "react";
