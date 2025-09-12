@@ -8,7 +8,9 @@ const BlogTableItem = ({authorImg, title, author, date, deleteBlog, mongoId}) =>
     return (
         <tr className="bg-white border-b">
            <th scope="row" className="items-center gap-3 hidden sm:flex px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-            <Image src={authorImg ? authorImg : assets.profile_icon} alt="Author" width={40} height={40} className="w-10 h-10 rounded-full" />
+            <div className="w-10 h-10 bg-gray-600 rounded-full flex items-center justify-center">
+                <span className="text-white font-bold text-sm">{author ? author.charAt(0).toUpperCase() : "A"}</span>
+            </div>
            <p>{author?author:"no author"}</p>
            </th>
            <td className="px-6 py-4">

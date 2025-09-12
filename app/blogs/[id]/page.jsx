@@ -76,7 +76,9 @@ const page = ({params}) => {
         </div>
     <div className="text-center my-24">
         <h1 className="text-2xl sm:text-5xl font-semibold max-w-[700px] mx-auto text-gray-800 dark:text-gray-100">{data.title}</h1>
-        <Image className="mx-auto mt-6 border border-white dark:border-gray-600 rounded-full" src={data.authorImg || assets.profile_icon}  width={60} height={60} alt='' />
+        <div className="mx-auto mt-6 w-15 h-15 bg-gray-600 rounded-full flex items-center justify-center border border-white dark:border-gray-600">
+            <span className="text-white font-bold text-lg">{data.author ? data.author.charAt(0).toUpperCase() : "A"}</span>
+        </div>
         <p className="mt-1 pb-2 text-lg max-w-[740px] mx-auto text-gray-600 dark:text-gray-300">{data.author}</p>
     </div>
     </div>
