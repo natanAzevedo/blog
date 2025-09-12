@@ -69,9 +69,8 @@ const page = ({params}) => {
                 </div>
             </Link>
             <div className="flex items-center gap-4">
-                <ThemeToggle />
                 <button className="flex items-center gap-2 font-medium py-1 px-3 sm:py-3 sm:px-6 border border-gray-800 dark:border-gray-300 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 shadow-[-7px_7px_0px_#000000] dark:shadow-[-7px_7px_0px_#ffffff] hover:transform hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all duration-200">
-                    Começar Leitura <Image src={assets.arrow} alt='' width={20} height={20} className="dark:invert" />
+                    Começar Leitura <span className="ml-2">→</span>
                 </button>
             </div>
         </div>

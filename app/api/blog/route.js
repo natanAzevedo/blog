@@ -1,10 +1,6 @@
 import { NextResponse } from 'next/server';
-import { writeFile } from 'fs/promises';
 import BlogModel from '../../../lib/models/BlogModel';
 import dbConnect from '../../../lib/config/db';
-import { request } from 'http';
-
-const fs = require('fs');
 
 const LoadDB = async () => {
     await dbConnect();
@@ -17,15 +13,35 @@ export async function GET(request) {
     if (blogId) {
         const blog = await BlogModel.findById(blogId);
         if (blog) {
+            // Verificar e corrigir imagens locais quebradas
+            if (blog.image && blog.image.startsWith('/') && blog.image.includes('_')) {
+                blog.image = 'https://via.placeholder.com/400x200?text=Blog+Image';
+                // Salvar a correção no banco
+                await BlogModel.findByIdAndUpdate(blogId, { image: blog.image });
+            }
             return NextResponse.json({ blog });
         } else {
             return NextResponse.json({ error: 'Blog not found' }, { status: 404 });
         }
     } else {
         const blogs = await BlogModel.find({});
+        
+        // Corrigir imagens locais quebradas em todos os blogs
+        let hasUpdates = false;
+        for (let blog of blogs) {
+            if (blog.image && blog.image.startsWith('/') && blog.image.includes('_')) {
+                blog.image = 'https://via.placeholder.com/400x200?text=Blog+Image';
+                await BlogModel.findByIdAndUpdate(blog._id, { image: blog.image });
+                hasUpdates = true;
+            }
+        }
+        
+        if (hasUpdates) {
+            console.log('Corrigidas imagens locais quebradas');
+        }
+        
         return NextResponse.json({ blogs });
     }
-    
 }
 
 export async function POST(request) {
@@ -34,73 +50,74 @@ export async function POST(request) {
         const contentType = request.headers.get('content-type');
         console.log('Content-Type:', contentType);
         
-        // Try to parse as FormData first
-        try {
+        // Se for FormData (upload de arquivo)
+        if (contentType && contentType.includes('multipart/form-data')) {
             const formData = await request.formData();
             console.log('FormData parsed successfully');
             
-            const timestamp = Date.now();
             const image = formData.get('image');
+            let imageBase64 = '';
             
-            console.log('Image from formData:', image);
-            console.log('Image type:', typeof image);
-            console.log('Image name:', image?.name);
-            console.log('Image size:', image?.size);
-            
-            if (!image) {
-                console.log('No image found in formData');
-                return NextResponse.json({ 
-                    error: 'No image file provided in formData' 
-                }, { status: 400 });
+            if (image && typeof image !== 'string') {
+                console.log('Processing image file:', image.name);
+                
+                // Converter imagem para Base64
+                const imageByteData = await image.arrayBuffer();
+                const buffer = Buffer.from(imageByteData);
+                const mimeType = image.type;
+                imageBase64 = `data:${mimeType};base64,${buffer.toString('base64')}`;
+                
+                console.log('Image converted to Base64 successfully');
             }
-            
-            if (typeof image === 'string') {
-                console.log('Image is a string, not a file');
-                return NextResponse.json({ 
-                    error: 'Image field contains text, not a file' 
-                }, { status: 400 });
-            }
-
-            const imageByteData = await image.arrayBuffer();
-            const buffer = Buffer.from(imageByteData);
-            const path = `./public/${timestamp}_${image.name}`;
-            await writeFile(path, buffer);
-            const imgUrl = `/${timestamp}_${image.name}`;
-            console.log('Image saved successfully:', imgUrl);
             
             const blogData = {
-                title: `${formData.get('title')}`,
-                description: `${formData.get('description')}`,
-                category: `${formData.get('category')}`,
-                author: `${formData.get('author')}`,
-                image: `${imgUrl}`,
-                
-                authorImg: `${formData.get('authorImg')}`
-            }
-            await BlogModel.create(blogData);
-
-       return NextResponse.json({ success: true, msg: "Blog adicionado com sucesso!" });
-        } catch (formDataError) {
-            console.log('FormData parsing failed, trying JSON:', formDataError.message);
+                title: formData.get('title'),
+                description: formData.get('description'),
+                category: formData.get('category'),
+                author: formData.get('author'),
+                image: imageBase64 || formData.get('imageUrl') || '', // Base64 ou URL
+                authorImg: formData.get('authorImg') || ''
+            };
             
-            // If FormData fails, try JSON
-            try {
-                const data = await request.json();
-                console.log('JSON data received:', data);
-                
+            console.log('Creating blog with FormData');
+            await BlogModel.create(blogData);
+            
+            return NextResponse.json({ 
+                success: true, 
+                msg: "Blog adicionado com sucesso!" 
+            });
+        } 
+        // Se for JSON (URL de imagem)
+        else {
+            const data = await request.json();
+            console.log('JSON data received:', data);
+            
+            // Validate required fields
+            if (!data.title || !data.description || !data.category || !data.author) {
                 return NextResponse.json({ 
-                    message: 'Blog data received as JSON',
-                    data: data 
-                });
-            } catch (jsonError) {
-                console.log('JSON parsing also failed:', jsonError.message);
-                return NextResponse.json({ 
-                    error: 'Unable to parse request body as FormData or JSON',
-                    formDataError: formDataError.message,
-                    jsonError: jsonError.message
+                    error: 'Missing required fields: title, description, category, or author' 
                 }, { status: 400 });
             }
+            
+            // Create blog data object
+            const blogData = {
+                title: data.title,
+                description: data.description,
+                category: data.category,
+                author: data.author,
+                image: data.image || '', // URL da imagem ou string vazia
+                authorImg: data.authorImg || ''
+            };
+            
+            console.log('Creating blog with JSON data');
+            await BlogModel.create(blogData);
+
+            return NextResponse.json({ 
+                success: true, 
+                msg: "Blog adicionado com sucesso!" 
+            });
         }
+        
     } catch (error) {
         console.error('Error processing request:', error);
         return NextResponse.json({ 
@@ -112,8 +129,9 @@ export async function POST(request) {
 
 export async function DELETE(request) {
     const id = request.nextUrl.searchParams.get('id');
-    const blog = await BlogModel.findById(id);
-    fs.unlink(`./public${blog.image}`, () => {});
     await BlogModel.findByIdAndDelete(id);
-    return NextResponse.json({ success: true, msg: 'Blog deletado com sucesso!' });
+    return NextResponse.json({ 
+        success: true, 
+        msg: 'Blog deletado com sucesso!' 
+    });
 }
