@@ -27,10 +27,10 @@ useEffect(() => {
 }, []);
 
 const categories = [
-  { key: "All", label: "Todos", icon: "📚" },
-  { key: "Technology", label: "Tecnologia", icon: "💻" },
-  { key: "Startup", label: "Startups", icon: "🚀" },
-  { key: "Lifestyle", label: "Estilo de Vida", icon: "🌟" }
+  { key: "All", label: "Todos" },
+  { key: "Technology", label: "Tecnologia" },
+  { key: "Startup", label: "Startups" },
+  { key: "Lifestyle", label: "Estilo de Vida" }
 ];
 
   return (
@@ -57,7 +57,6 @@ const categories = [
             }`}
             onClick={() => setMenu(category.key)}
           >
-            <span className="text-lg">{category.icon}</span>
             <span>{category.label}</span>
             {menu === category.key && (
               <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
