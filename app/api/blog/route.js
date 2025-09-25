@@ -46,14 +46,17 @@ export async function GET(request) {
 
 export async function POST(request) {
     try {
-        console.log('POST request received');
+        await dbConnect();
+        console.log('POST request received - Database connected');
         const contentType = request.headers.get('content-type');
+        console.log('Content-Type:', contentType);
         console.log('Content-Type:', contentType);
         
         // Se for FormData (upload de arquivo)
         if (contentType && contentType.includes('multipart/form-data')) {
             const formData = await request.formData();
             console.log('FormData parsed successfully');
+            console.log('authorImg from form:', formData.get('authorImg'));
             
             const image = formData.get('image');
             let imageBase64 = '';
@@ -79,8 +82,18 @@ export async function POST(request) {
                 authorImg: formData.get('authorImg') || ''
             };
             
+            console.log('Blog data prepared:', {
+                title: blogData.title,
+                description: blogData.description?.length + ' chars',
+                category: blogData.category,
+                author: blogData.author,
+                imageLength: blogData.image?.length,
+                authorImg: blogData.authorImg
+            });
+            
             console.log('Creating blog with FormData');
-            await BlogModel.create(blogData);
+            const newBlog = await BlogModel.create(blogData);
+            console.log('Blog created successfully with ID:', newBlog._id);
             
             return NextResponse.json({ 
                 success: true, 
@@ -134,4 +147,33 @@ export async function DELETE(request) {
         success: true, 
         msg: 'Blog deletado com sucesso!' 
     });
+}
+
+export async function PUT(request) {
+    try {
+        await dbConnect();
+        const data = await request.json();
+        const { id, ...updateData } = data;
+        
+        const updatedBlog = await BlogModel.findByIdAndUpdate(id, updateData, { new: true });
+        
+        if (!updatedBlog) {
+            return NextResponse.json({ 
+                success: false, 
+                error: 'Blog não encontrado' 
+            }, { status: 404 });
+        }
+        
+        return NextResponse.json({ 
+            success: true, 
+            msg: 'Blog atualizado com sucesso!',
+            blog: updatedBlog
+        });
+    } catch (error) {
+        console.error('Error updating blog:', error);
+        return NextResponse.json({ 
+            error: 'Failed to update blog',
+            details: error.message 
+        }, { status: 500 });
+    }
 }

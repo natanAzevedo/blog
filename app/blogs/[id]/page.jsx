@@ -68,11 +68,6 @@ const page = ({params}) => {
                     <span className="text-xl font-bold text-gray-800 dark:text-gray-100">Blog</span>
                 </div>
             </Link>
-            <div className="flex items-center gap-4">
-                <button className="flex items-center gap-2 font-medium py-1 px-3 sm:py-3 sm:px-6 border border-gray-800 dark:border-gray-300 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 shadow-[-7px_7px_0px_#000000] dark:shadow-[-7px_7px_0px_#ffffff] hover:transform hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all duration-200">
-                    Começar Leitura <span className="ml-2">→</span>
-                </button>
-            </div>
         </div>
     <div className="text-center my-24">
         <h1 className="text-2xl sm:text-5xl font-semibold max-w-[700px] mx-auto text-gray-800 dark:text-gray-100">{data.title}</h1>
@@ -85,7 +80,7 @@ const page = ({params}) => {
     <div className="mx-5 max-w-[800px] md:mx-auto mt-[-100px] mb-10 bg-white dark:bg-gray-900 transition-colors duration-300">
             <Image className="border-4 border-white dark:border-gray-700 rounded-lg"  src={data.image}  width={1280} height={720} alt='' />
 
-            <div className="blog-content px-6" dangerouslySetInnerHTML={{ __html: data.description }} />
+            <div className="blog-content px-6 text-gray-800 dark:text-gray-100 leading-relaxed" dangerouslySetInnerHTML={{ __html: data.description }} />
 
             <div className="my-24 px-6">
                 <p className="text-gray-800 dark:text-gray-200 font-semibold my-4">Compartilhe este artigo nas redes sociais</p>

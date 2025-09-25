@@ -11,8 +11,8 @@ const page = () => {
     const [data, setData] = React.useState({
         title: "",
         description: "",
-        category: "Startup",
-        author:"Alex Bennett",
+        category: "Projeto",
+        author:"Adm",
         authorImg:""
     });
 
@@ -44,7 +44,7 @@ const page = () => {
             formData.append('description', data.description);
             formData.append('category', data.category);
             formData.append('author', data.author);
-            formData.append('authorImg', data.authorImg);
+            formData.append('authorImg', data.authorImg || "");
             formData.append('image', image);
             
             const response = await axios.post('/api/blog', formData, {
@@ -58,8 +58,8 @@ const page = () => {
                 setData({
                     title: "",
                     description: "",
-                    category: "Startup",
-                    author: "Alex Bennett",
+                    category: "Projeto",
+                    author: "Adm",
                     authorImg: ""
                 });
                 setImage(null);
@@ -128,9 +128,9 @@ const page = () => {
                 value={data.category} 
                 className="w-40 mt-4 px-4 py-3 border bg-gray-800 text-gray-200 border-gray-600"
             >
-                <option value="Startup">Startup</option>
-                <option value="Technology">Technology</option>
-                <option value="Lifestyle">Lifestyle</option>
+                <option value="Projeto">Projeto</option>
+                <option value="Tecnologia">Tecnologia</option>
+                <option value="Estilo de Vida">Estilo de Vida</option>
             </select>
             <br />
             <button 

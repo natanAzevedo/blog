@@ -28,9 +28,9 @@ useEffect(() => {
 
 const categories = [
   { key: "All", label: "Todos" },
-  { key: "Technology", label: "Tecnologia" },
-  { key: "Startup", label: "Startups" },
-  { key: "Lifestyle", label: "Estilo de Vida" }
+  { key: "Tecnologia", label: "Tecnologia" },
+  { key: "Projeto", label: "Projeto" },
+  { key: "Estilo de Vida", label: "Estilo de Vida" }
 ];
 
   return (

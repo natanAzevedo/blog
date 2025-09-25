@@ -1,6 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import { assets } from "../../Assets/assets";
+import Link from "next/link";
 
 const BlogTableItem = ({authorImg, title, author, date, deleteBlog, mongoId}) => {
     const BlogDate = new Date(date);
@@ -19,8 +20,20 @@ const BlogTableItem = ({authorImg, title, author, date, deleteBlog, mongoId}) =>
             <td className="px-6 py-4">
                 {BlogDate.toLocaleDateString()}
            </td>
-            <td onClick={() => deleteBlog(mongoId)} className="px-6 py-4 cursor-pointer">
-              x
+            <td className="px-6 py-4">
+                <div className="flex gap-2">
+                    <Link href={`/admin/editBlog?id=${mongoId}`}>
+                        <button className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm transition-colors">
+                            Editar
+                        </button>
+                    </Link>
+                    <button 
+                        onClick={() => deleteBlog(mongoId)} 
+                        className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm transition-colors cursor-pointer"
+                    >
+                        Deletar
+                    </button>
+                </div>
            </td>
         </tr>
     );
