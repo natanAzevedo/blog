@@ -21,14 +21,6 @@ const Footer = () => {
          {/* Links de Navegação */}
          <div className="flex gap-8">
            <div>
-             <h4 className="text-white font-semibold mb-3">Explorar</h4>
-             <ul className="space-y-2">
-               <li><a href="#" className="text-gray-400 hover:text-white transition-colors duration-300">Tecnologia</a></li>
-               <li><a href="#" className="text-gray-400 hover:text-white transition-colors duration-300">Desenvolvimento</a></li>
-               <li><a href="#" className="text-gray-400 hover:text-white transition-colors duration-300">Inovação</a></li>
-             </ul>
-           </div>
-           <div>
              <h4 className="text-white font-semibold mb-3">Contato</h4>
              <ul className="space-y-2">
                <li><a href="#" className="text-gray-400 hover:text-white transition-colors duration-300">Sobre</a></li>

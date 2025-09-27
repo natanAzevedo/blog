@@ -152,17 +152,79 @@ export async function DELETE(request) {
 export async function PUT(request) {
     try {
         await dbConnect();
-        const data = await request.json();
-        const { id, ...updateData } = data;
+        console.log('PUT request received - Database connected');
+        
+        const contentType = request.headers.get('content-type');
+        console.log('Content-Type:', contentType);
+        
+        let updateData = {};
+        let id = null;
+        
+        // Se for FormData (com upload de imagem)
+        if (contentType && contentType.includes('multipart/form-data')) {
+            console.log('Processing FormData (with image upload)');
+            
+            const formData = await request.formData();
+            id = formData.get('id');
+            
+            const image = formData.get('image');
+            let imageBase64 = '';
+            
+            if (image && typeof image !== 'string') {
+                console.log('Processing new image file:', image.name);
+                
+                // Converter imagem para Base64
+                const imageByteData = await image.arrayBuffer();
+                const buffer = Buffer.from(imageByteData);
+                const mimeType = image.type;
+                imageBase64 = `data:${mimeType};base64,${buffer.toString('base64')}`;
+                
+                console.log('Image converted to Base64 successfully');
+            }
+            
+            updateData = {
+                title: formData.get('title'),
+                description: formData.get('description'),
+                category: formData.get('category'),
+                author: formData.get('author'),
+                authorImg: formData.get('authorImg') || '',
+                ...(imageBase64 && { image: imageBase64 }) // Só atualiza imagem se há uma nova
+            };
+        } 
+        // Se for JSON (sem imagem)
+        else {
+            console.log('Processing JSON data (without image)');
+            
+            const data = await request.json();
+            console.log('Data received for update:', data);
+            
+            const { id: blogId, ...restData } = data;
+            id = blogId;
+            updateData = restData;
+        }
+        
+        if (!id) {
+            console.error('No ID provided for update');
+            return NextResponse.json({ 
+                success: false, 
+                error: 'ID do blog é obrigatório' 
+            }, { status: 400 });
+        }
+
+        console.log('Updating blog with ID:', id);
+        console.log('Update data:', updateData);
         
         const updatedBlog = await BlogModel.findByIdAndUpdate(id, updateData, { new: true });
         
         if (!updatedBlog) {
+            console.error('Blog not found with ID:', id);
             return NextResponse.json({ 
                 success: false, 
                 error: 'Blog não encontrado' 
             }, { status: 404 });
         }
+        
+        console.log('Blog updated successfully:', updatedBlog._id);
         
         return NextResponse.json({ 
             success: true, 
@@ -172,7 +234,8 @@ export async function PUT(request) {
     } catch (error) {
         console.error('Error updating blog:', error);
         return NextResponse.json({ 
-            error: 'Failed to update blog',
+            success: false,
+            error: 'Erro interno do servidor',
             details: error.message 
         }, { status: 500 });
     }

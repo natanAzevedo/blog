@@ -18,7 +18,7 @@ const Header = () => {
         Descubra Projetos que <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Inspiram</span>
       </h1>
       <p className="mt-6 max-w-2xl m-auto text-lg sm:text-xl text-gray-300 leading-relaxed">
-        Explore artigos únicos sobre tecnologia, desenvolvimento pessoal e inovação. Conteúdo criado para expandir seus horizontes e transformar sua perspectiva.
+        Explore artigos únicos e conteúdo de qualidade. Histórias criadas para expandir seus horizontes e transformar sua perspectiva.
       </p>
     </div>
 

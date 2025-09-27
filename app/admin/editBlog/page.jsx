@@ -16,6 +16,7 @@ const EditBlog = () => {
         authorImg: ""
     });
     const [isLoading, setIsLoading] = React.useState(true);
+    const [isUpdating, setIsUpdating] = React.useState(false);
     const [blogId, setBlogId] = React.useState(null);
     const [currentImageUrl, setCurrentImageUrl] = React.useState("");
 
@@ -29,9 +30,14 @@ const EditBlog = () => {
 
     const fetchBlogData = async (id) => {
         try {
+            console.log('Buscando dados do blog com ID:', id);
             const response = await axios.get(`/api/blog?id=${id}`);
+            console.log('Resposta do servidor:', response.data);
+            
             if (response.data.blog) {
                 const blog = response.data.blog;
+                console.log('Blog encontrado:', blog);
+                
                 setData({
                     title: blog.title,
                     description: blog.description,
@@ -52,38 +58,75 @@ const EditBlog = () => {
     const onSubmitHandler = async (e) => {
         e.preventDefault();
         
+        if (isUpdating) return; // Previne múltiplos submits
+        
         try {
-            const formData = new FormData();
-            formData.append('title', data.title);
-            formData.append('description', data.description);
-            formData.append('category', data.category);
-            formData.append('author', data.author);
-            formData.append('authorImg', data.authorImg || "");
+            setIsUpdating(true);
             
-            // Se uma nova imagem foi selecionada, inclui ela
+            // Se há uma nova imagem, usar FormData para upload
             if (image) {
+                console.log('Nova imagem detectada, usando FormData para upload');
+                
+                const formData = new FormData();
+                formData.append('id', blogId);
+                formData.append('title', data.title);
+                formData.append('description', data.description);
+                formData.append('category', data.category);
+                formData.append('author', data.author);
+                formData.append('authorImg', data.authorImg || "");
                 formData.append('image', image);
-            }
-
-            const response = await axios.put('/api/blog', {
-                id: blogId,
-                title: data.title,
-                description: data.description,
-                category: data.category,
-                author: data.author,
-                authorImg: data.authorImg || "",
-                // Se uma nova imagem foi selecionada, ela será processada separadamente
-                ...(image && { newImage: true })
-            });
-
-            if (response.data.success) {
-                toast.success(response.data.msg);
+                formData.append('updateImage', 'true'); // Flag para indicar atualização de imagem
+                
+                console.log('Enviando FormData com nova imagem');
+                
+                const response = await axios.put('/api/blog', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                });
+                
+                console.log('Resposta do servidor:', response.data);
+                
+                if (response.data.success) {
+                    toast.success(response.data.msg);
+                    setImage(null); // Limpar imagem selecionada
+                    // Recarregar os dados do blog para mostrar as mudanças
+                    await fetchBlogData(blogId);
+                } else {
+                    toast.error(response.data.error || "Erro ao atualizar blog");
+                }
             } else {
-                toast.error("Erro ao atualizar blog");
+                console.log('Sem nova imagem, usando JSON para update');
+                
+                // Preparar dados para envio (sem imagem)
+                const updateData = {
+                    id: blogId,
+                    title: data.title,
+                    description: data.description,
+                    category: data.category,
+                    author: data.author,
+                    authorImg: data.authorImg || ""
+                };
+
+                console.log('Enviando dados para update:', updateData);
+
+                const response = await axios.put('/api/blog', updateData);
+
+                console.log('Resposta do servidor:', response.data);
+
+                if (response.data.success) {
+                    toast.success(response.data.msg);
+                    // Recarregar os dados do blog para mostrar as mudanças
+                    await fetchBlogData(blogId);
+                } else {
+                    toast.error(response.data.error || "Erro ao atualizar blog");
+                }
             }
         } catch (error) {
             console.error('Erro:', error);
-            toast.error("Erro ao atualizar blog");
+            toast.error(error.response?.data?.error || "Erro ao atualizar blog");
+        } finally {
+            setIsUpdating(false);
         }
     };
 
@@ -112,15 +155,24 @@ const EditBlog = () => {
                 
                 {/* Campo de upload de imagem */}
                 <div>
-                    <p className="text-xl text-gray-200">Imagem Atual / Nova Imagem</p>
-                    <label htmlFor="image" className="cursor-pointer">
-                        <Image 
-                            className="mt-4 border border-gray-600 rounded" 
-                            src={image ? URL.createObjectURL(image) : (currentImageUrl || assets.upload_area)} 
-                            alt="Thumbnail" 
-                            width={140} 
-                            height={70} 
-                        />
+                    <p className="text-xl text-gray-200">
+                        {image ? "Nova Imagem Selecionada" : "Imagem Atual"}
+                    </p>
+                    <label htmlFor="image" className="cursor-pointer block">
+                        <div className="relative">
+                            <Image 
+                                className="mt-4 border border-gray-600 rounded" 
+                                src={image ? URL.createObjectURL(image) : (currentImageUrl || assets.upload_area)} 
+                                alt="Thumbnail" 
+                                width={140} 
+                                height={70} 
+                            />
+                            {image && (
+                                <div className="absolute top-2 right-2 bg-green-600 text-white text-xs px-2 py-1 rounded">
+                                    NOVA
+                                </div>
+                            )}
+                        </div>
                     </label>
                     <input 
                         onChange={(e) => setImage(e.target.files[0])} 
@@ -129,9 +181,23 @@ const EditBlog = () => {
                         hidden 
                         accept="image/*"
                     />
-                    <p className="text-sm text-gray-400 mt-2">
-                        Deixe em branco para manter a imagem atual
-                    </p>
+                    <div className="mt-2">
+                        <p className="text-sm text-gray-400">
+                            {image ? 
+                                `Nova imagem selecionada: ${image.name}` : 
+                                "Clique na imagem para substituir"
+                            }
+                        </p>
+                        {image && (
+                            <button
+                                type="button"
+                                onClick={() => setImage(null)}
+                                className="text-sm text-red-400 hover:text-red-300 mt-1"
+                            >
+                                Cancelar nova imagem
+                            </button>
+                        )}
+                    </div>
                 </div>
 
                 <p className="text-xl mt-6 text-gray-200">Título do Blog</p>
@@ -150,9 +216,10 @@ const EditBlog = () => {
                     name="description" 
                     onChange={onChangeHandler} 
                     value={data.description} 
-                    className="w-full sm:w-[500px] mt-4 px-4 py-3 border bg-gray-800 text-gray-200 border-gray-600" 
-                    placeholder="Escreva o conteúdo aqui" 
-                    rows={6} 
+                    className="w-full sm:w-[500px] mt-4 px-4 py-3 border bg-gray-800 text-gray-200 border-gray-600 whitespace-pre-wrap" 
+                    placeholder="Escreva o conteúdo aqui&#10;&#10;Use quebras de linha para separar parágrafos.&#10;A formatação será preservada." 
+                    rows={10} 
+                    style={{whiteSpace: 'pre-wrap', resize: 'vertical'}}
                     required
                 />
 
@@ -171,9 +238,14 @@ const EditBlog = () => {
                 <br />
                 <button 
                     type="submit" 
-                    className="mt-8 w-40 h-12 bg-green-600 hover:bg-green-700 text-white rounded transition-colors duration-200"
+                    disabled={isUpdating}
+                    className={`mt-8 w-40 h-12 text-white rounded transition-colors duration-200 ${
+                        isUpdating 
+                            ? 'bg-gray-600 cursor-not-allowed' 
+                            : 'bg-green-600 hover:bg-green-700'
+                    }`}
                 >
-                    ATUALIZAR
+                    {isUpdating ? 'ATUALIZANDO...' : 'ATUALIZAR'}
                 </button>
             </form>
         </>

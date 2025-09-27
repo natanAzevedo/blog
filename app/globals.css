@@ -12,6 +12,7 @@
 .blog-content{
   padding: 36px 0;
   line-height: 1.8;
+  white-space: pre-wrap;
 }
 
 .blog-content b{
@@ -21,17 +22,6 @@
 }
 
 .dark .blog-content b{
-  color: #ffffff;
-}
-
-.blog-content p{
-  margin-bottom: 16px;
-  color: #1f2937;
-  font-size: 16px;
-  font-weight: 400;
-}
-
-.dark .blog-content p{
   color: #ffffff;
 }
 
@@ -122,5 +112,33 @@
 .hover-lift:hover {
   transform: translateY(-4px);
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Estilos para preservar formatação de texto */
+.preserve-whitespace {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Estilos para textareas que preservam formatação */
+textarea.whitespace-pre-wrap {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  font-family: inherit;
+  line-height: 1.5;
+}
+
+/* Garantir que parágrafos e quebras de linha sejam preservados */
+.blog-content p {
+  margin-bottom: 16px;
+  color: #1f2937;
+  font-size: 16px;
+  font-weight: 400;
+  white-space: pre-wrap;
+}
+
+.dark .blog-content p {
+  color: #ffffff;
 }
 

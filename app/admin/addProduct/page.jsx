@@ -116,9 +116,10 @@ const page = () => {
                 name="description" 
                 onChange={onChangeHandler} 
                 value={data.description} 
-                className="w-full sm:w-[500px] mt-4 px-4 py-3 border bg-gray-800 text-gray-200 border-gray-600" 
-                placeholder="Escreva o conteúdo aqui" 
-                rows={6} 
+                className="w-full sm:w-[500px] mt-4 px-4 py-3 border bg-gray-800 text-gray-200 border-gray-600 whitespace-pre-wrap" 
+                placeholder="Escreva o conteúdo aqui&#10;&#10;Use quebras de linha para separar parágrafos.&#10;A formatação será preservada." 
+                rows={10} 
+                style={{whiteSpace: 'pre-wrap', resize: 'vertical'}}
                 required
             />
             <p className="text-xl mt-4 text-gray-200">Categoria do Blog</p>

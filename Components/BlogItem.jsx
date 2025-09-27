@@ -24,8 +24,8 @@ const BlogItem = ({title, description, category, image, id}) => {
         <div className="w-2 h-2 bg-gradient-to-r from-blue-400 to-indigo-400 rounded-full"></div>
       </div>
       <h5 className="mb-3 text-xl font-bold text-gray-100 line-clamp-2 group-hover:text-blue-400 transition-colors duration-300">{title}</h5>
-      <p className="mb-4 text-sm text-gray-300 leading-relaxed line-clamp-3"
-         dangerouslySetInnerHTML={{ __html: description.slice(0, 120) }}>
+      <p className="mb-4 text-sm text-gray-300 leading-relaxed line-clamp-3 whitespace-pre-wrap">
+        {description.slice(0, 120)}...
       </p>
 
       <Link href={`/blogs/${id}`} className="inline-flex items-center text-blue-400 font-semibold hover:text-indigo-400 transition-colors duration-300 group/link">

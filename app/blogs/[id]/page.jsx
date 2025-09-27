@@ -80,7 +80,9 @@ const page = ({params}) => {
     <div className="mx-5 max-w-[800px] md:mx-auto mt-[-100px] mb-10 bg-white dark:bg-gray-900 transition-colors duration-300">
             <Image className="border-4 border-white dark:border-gray-700 rounded-lg"  src={data.image}  width={1280} height={720} alt='' />
 
-            <div className="blog-content px-6 text-gray-800 dark:text-gray-100 leading-relaxed" dangerouslySetInnerHTML={{ __html: data.description }} />
+            <div className="blog-content px-6 text-gray-800 dark:text-gray-100 leading-relaxed whitespace-pre-wrap break-words">
+                {data.description}
+            </div>
 
             <div className="my-24 px-6">
                 <p className="text-gray-800 dark:text-gray-200 font-semibold my-4">Compartilhe este artigo nas redes sociais</p>
