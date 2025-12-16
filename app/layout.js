@@ -7,10 +7,10 @@ const outfit = Outfit({
 });
 
 export const metadata = {
-  title: "Blog - Inspirando através de histórias únicas",
+  title: "Tech Flow - Inspirando através de histórias únicas",
   description: "Descubra artigos únicos e conteúdo de qualidade. Histórias criadas para expandir seus horizontes e transformar sua perspectiva.",
-  keywords: "blog, histórias, conteúdo, projetos, inspiração",
-  author: "Blog",
+  keywords: "tech flow, blog, histórias, conteúdo, projetos, inspiração",
+  author: "Tech Flow",
   viewport: "width=device-width, initial-scale=1",
   icons: {
     icon: null,

@@ -11,9 +11,9 @@ const Footer = () => {
            <div className="flex items-center gap-3 mb-4">
              <Link href="/" className="flex items-center gap-3" aria-label="Ir para a página inicial">
                <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full flex items-center justify-center">
-                 <span className="text-white font-bold text-lg">B</span>
+                 <span className="text-white font-bold text-lg">TF</span>
                </div>
-               <span className="text-2xl font-bold text-white">Blog</span>
+               <span className="text-2xl font-bold text-white">Tech Flow</span>
              </Link>
            </div>
            <p className="text-gray-400 text-sm max-w-md text-center md:text-left">
@@ -80,7 +80,7 @@ const Footer = () => {
 
        <div className="border-t border-gray-700 mt-8 pt-8 text-center">
          <p className="text-gray-400 text-sm">
-           © 2025 Blog. Todos os direitos reservados.
+           © 2025 Tech Flow. Todos os direitos reservados.
          </p>
        </div>
      </div>

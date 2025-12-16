@@ -13,7 +13,7 @@ export default function Layout({ children }) {
                     <h1 className="text-2xl font-bold text-red-400 mb-4">Acesso Negado</h1>
                     <p className="text-gray-300">O painel admin só está disponível em ambiente de desenvolvimento.</p>
                     <a href="/" className="mt-4 inline-block px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
-                        Voltar ao Blog
+                        Voltar ao Tech Flow
                     </a>
                 </div>
             </div>
