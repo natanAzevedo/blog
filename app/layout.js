@@ -11,12 +11,16 @@ export const metadata = {
   description: "Descubra artigos únicos e conteúdo de qualidade. Histórias criadas para expandir seus horizontes e transformar sua perspectiva.",
   keywords: "tech flow, blog, histórias, conteúdo, projetos, inspiração",
   author: "Tech Flow",
-  viewport: "width=device-width, initial-scale=1",
   icons: {
     icon: null,
     shortcut: null,
     apple: null,
   },
+};
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({ children }) {
