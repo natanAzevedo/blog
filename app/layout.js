@@ -3,7 +3,7 @@ import "./globals.css";
 
 const outfit = Outfit({
   subsets: ["latin"],
-  weight: ["400","500", "600", "700"],
+  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata = {
@@ -12,9 +12,9 @@ export const metadata = {
   keywords: "tech flow, blog, histórias, conteúdo, projetos, inspiração",
   author: "Tech Flow",
   icons: {
-    icon: null,
-    shortcut: null,
-    apple: null,
+    icon: "/favicon.png",
+    shortcut: "/favicon.png",
+    apple: "/favicon.png",
   },
 };
 
@@ -26,9 +26,6 @@ export const viewport = {
 export default function RootLayout({ children }) {
   return (
     <html lang="pt-BR">
-      <head>
-        <link rel="icon" href="data:,"/>
-      </head>
       <body className={`${outfit.className} bg-gray-900 text-white`}>
         {children}
       </body>
