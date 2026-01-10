@@ -12,7 +12,7 @@ export const metadata = {
   keywords: "tech flow, blog, histórias, conteúdo, projetos, inspiração",
   author: "Tech Flow",
   icons: {
-    icon: "/favicon.png",
+    icon: "/favicon.svg",
   },
 };
 
