@@ -11,6 +11,9 @@ export const metadata = {
   description: "Descubra artigos únicos e conteúdo de qualidade. Histórias criadas para expandir seus horizontes e transformar sua perspectiva.",
   keywords: "tech flow, blog, histórias, conteúdo, projetos, inspiração",
   author: "Tech Flow",
+  icons: {
+    icon: "/favicon.png",
+  },
 };
 
 export const viewport = {
