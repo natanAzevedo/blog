@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <style>
+    :root {
+      --logo-color: #000000;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --logo-color: #ffffff;
+      }
+    }
+    .tf-text {
+      fill: var(--logo-color);
+      font-family: Arial, sans-serif;
+      font-weight: bold;
+      font-size: 18px;
+    }
+  </style>
+  <text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle" class="tf-text">TF</text>
+</svg>
