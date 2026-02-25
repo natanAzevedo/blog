@@ -2,6 +2,8 @@ import React from 'react'
 import Header from '../../Components/Header.jsx'
 import Footer from '../../Components/Footer.jsx'
 
+
+
 export default function Page(){
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 transition-colors duration-300">
