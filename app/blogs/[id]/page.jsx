@@ -6,6 +6,7 @@ import Link from "next/link";
 import Footer from "../../../Components/Footer";
 import axios from "axios";
 
+
 const page = ({params}) => {
     const [data, setData] = React.useState(null);
     const [loading, setLoading] = React.useState(true);
